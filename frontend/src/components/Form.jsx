@@ -9,14 +9,14 @@ import LoadingIndicator from "./LoadingIndicator"
 function Form({route, method}) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState("")
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const name = method === "login" ? "Login" : "Register"
 
     const handleSubmit = async (e) => {
-        setLoading(true);
         e.preventDefault();
+        setLoading(true);
 
         try {
             const res = await api.post(route, {username, password})
@@ -29,7 +29,7 @@ function Form({route, method}) {
             }
 
         } catch (error) {
-            alert(error)
+            alert(error.response?.data?.detail || error.message)
         } finally {
             setLoading(false)
         }
@@ -37,10 +37,10 @@ function Form({route, method}) {
 
     return <form onSubmit={handleSubmit} className="form-container">
         <h1>{name}</h1>
-        <input className="form-input" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username"></input>
-        <input className="form-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password"></input>
+        <input className="form-input" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username" required></input>
+        <input className="form-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" required></input>
         {loading && <LoadingIndicator />}
-        <button className="form-button" type="submit">{name}</button>
+        <button className="form-button" type="submit" disabled={loading}>{name}</button>
     </form>
 }
 
