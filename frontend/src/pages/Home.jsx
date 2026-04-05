@@ -7,20 +7,22 @@ function Home() {
     const [notes, setNotes] = useState([]);
     const [content, setContent] = useState("")
     const [title, setTitle] = useState("")
+    
 
     useEffect(() => {
         getNotes();
     }, [])
 
-    const getNotes = () => {
-        api
-            .get("/api/notes/")
-            .then((res) => res.data)
-            .then((data) => { setNotes(data); console.log(data) })
-            .catch((err) => alert(err))
-            
+    const getNotes = async () => {
+        try {
+            const res = await api.get("/api/notes/");
+            setNotes(res.data);
+        } catch (err) {
+            console.error(err);
+            alert("Failed to fetch notes");
+        }
     };
-
+    
     const deleteNote = (id) => {
         api
             .delete(`/api/notes/delete/${id}/`).then((res) => {
@@ -41,14 +43,15 @@ function Home() {
             .then((res) => {
                 if (res.status === 201) {
                     alert ("Note created!")
+                    setTitle("")
+                    setContent("")
                     getNotes()
+
                 } else {
                     alert ("Failed to create note")
                 }
             })
             .catch ((err) => alert (err))
-
-    
     }
 
     return <div>
