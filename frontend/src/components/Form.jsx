@@ -14,8 +14,12 @@ function Form({route, method}) {
 
     const name = method === "login" ? "Login" : "Register"
 
+    useEffect(() => {
+        document.title = `${name} | EN-Notes`
+    }, [name])
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         setLoading(true);
 
         try {
