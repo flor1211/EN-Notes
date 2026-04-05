@@ -8,8 +8,8 @@ function Home() {
     const [content, setContent] = useState("")
     const [title, setTitle] = useState("")
     
-
     useEffect(() => {
+        document.title = `EN-Notes | Home`
         getNotes();
     }, [])
 
